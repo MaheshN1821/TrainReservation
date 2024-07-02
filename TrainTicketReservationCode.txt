@@ -1,0 +1,910 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<fstream>
+#include<ctime>
+#include<cstdlib>
+#include<Windows.h>
+
+using namespace std;
+
+int totalcost = 0;
+string file_name;
+
+int registration()
+{
+    char pass[13],phno[11];
+    string name,username,line,name1; 
+    int m;
+
+    cout<<"\nEnter your name : ";
+    cin>>name;
+    
+    do{
+        cout<<"\nEnter your phone number : ";
+        cin>>phno; 
+    } while(strlen(phno) != 10);
+
+    do
+    {
+        if(m == 0)
+        {
+            cout<<"\nUsername already Exists!!!\nRepeat the process!\n";
+        }
+        cout<<"\nCreate a Username : ";
+        cin>>username;
+        
+        do
+        {
+            cout<<"\nNOTE : Password must be 12 characters long!\n";
+            cout<<"\nCreate a Password : ";
+            cin>>pass;
+        } while (strlen(pass) != 12);
+        
+        ifstream infile("a.txt");
+
+        if(!infile.is_open())
+        {
+            cout<<"\nFailed to open\n";
+            return -1;
+        }
+
+        while(getline(infile,line))
+        {
+            if(line.find("Name: ") != string::npos)
+            {
+                name1 = line.substr(6);
+            } 
+            
+            m = username.compare(name1);
+            if(m == 0)
+            {
+                break;
+            }
+        }
+         
+        infile.close();
+
+    }while(m == 0);
+    
+    {
+        ofstream outFile("a.txt", ios::app);
+        
+        if(!outFile.is_open())
+        {
+            cout<<"\nError!\n";
+            return 2;
+        }
+        
+        outFile<<"User_Name: "<<name<<endl;
+        outFile<<"Phone_Number: "<<phno<<endl;
+        outFile<<"Name: "<<username<<endl;
+        outFile<<"Pass: "<<pass<<endl;
+        outFile<<"---------------------------------------------------"<<endl;
+        outFile.close();
+    }
+
+    return 1;
+}
+
+void login()
+{
+    int a = 0;
+    string name,name1,pass,line,pass1;
+    do
+    {
+        if(a == 1)
+        {
+            cout<<"\nInvalid Username or Password!\n";
+        }
+        cout<<"\nEnter Username : ";
+        cin>>name;
+        cout<<"\nEnter Password : ";
+        cin>>pass;
+
+        ifstream infile("a.txt");
+
+        if(!infile.is_open())
+        {
+            cout<<"\nFailed to open\n";
+            return;
+        }
+
+        while(getline(infile,line))
+        {
+            if(line.find("Name: ") != string::npos)
+            {
+                name1 = line.substr(6);
+            } 
+            else if(line.find("Pass: ") != string::npos)
+            {
+                pass1 = line.substr(6);
+            }
+            if(name.compare(name1) == 0 && pass.compare(pass1) == 0)
+            {
+                cout<<"\nEntered Login Details are correct, you can continue\n";
+                {
+                    ofstream outFile;
+                    file_name = name + ".txt";
+
+                    outFile.open(file_name, ios::app);
+
+                    if(!outFile.is_open())
+                    {
+                        cout<<"\nERROR : Unable to open a File!!\n";
+                        exit(0);
+                    }
+
+                    outFile.close();
+                }                
+                a = 1;
+                break;
+            }
+        }
+        infile.close();
+    } while (a != 1);
+}
+
+void authorization()
+{
+    int choice,n;
+
+    cout<<"\nFor Registration[New User] press 1";
+    cout<<"\nFor Login[Existing User] press 2";
+    cout<<"\nEnter your choice : ";
+    cin>>choice;
+    
+    switch(choice)
+    {
+        case 1 :    n = registration();
+                    break;
+
+        case 2 :    login();
+                    goto x;
+                    break;
+
+        default :   break; 
+    }
+
+    do
+    {    
+        if(n == 1)
+        {
+            cout<<"\nRegistrstion Process Completed Successfully\nProceed : \n";
+            login();
+            break;
+        }
+        else
+        {
+            cout<<"\nRegistration Unsuccessful\nTry again\n";
+            n = registration();
+        }
+    } while (n == 1);
+
+    x : return;
+}
+
+struct node
+{
+    int train_num;
+    int numoftickets;
+    int cost;
+    int ticket_num;
+    string train_name;
+    string typeoftickets; 
+    string date_of_reservation;
+    string gender;
+    string categ;
+    string aadhar;
+    node *next;
+};
+
+typedef struct node* NODE;
+
+//CODE FOR ADDING TICKETS OF TRAIN TO NODES
+
+NODE book_ticket(NODE head,int num,int numoftickets,int cost,string name,string typeoftickets, int tnum,string date,string gen,string categ1,string aadhar1)
+{
+    NODE temp = new node;
+
+    temp->train_num = num;
+    temp->numoftickets = numoftickets;
+    temp->cost = cost;
+    temp->train_name = name;
+    temp->typeoftickets = typeoftickets;
+    temp->ticket_num = tnum;
+    temp->date_of_reservation = date;
+    temp->gender = gen;
+    temp->categ = categ1;
+    temp->aadhar = aadhar1;
+
+    temp->next = head;
+    
+    return temp;
+}
+
+//CODE FOR READING DATA FROM THE FILE IF THE USERS WISH TO DELETE OR DISPLAY THE TRAIN TICKETS PURCHASED
+
+int* readingDataFromFile(NODE head[]) 
+{
+    string train_name01, type_of_ticket01,line,date,gen3,categ3,aadhar3; 
+    int i,count,j;
+    int number[] = {11302,16534,16210,22691,12627,12649,22888,12253,15227,12214,22692,12648,12314,12312,13008,12952,12926,19020,12863,22306,22502,12301,12329,12311,12860,12321,18030,19568,16613,16331,12925,12903,19019,12859,12809,12322};
+    int num_tickets = 0;
+    int ticket_num = 0;
+    int train_num = 0;
+    int cost = 0;
+    count = -1;
+    int *ptr;
+    int m = -1;
+    ptr = &m;
+    int *ticket = new int[36];  //dynamix arrays
+    for (j = 0; j < 36;j++) {
+        ticket[j] = 0;
+    }
+
+    ifstream file(file_name);
+    if (!file.is_open()) {
+        cerr << "Error opening file." << endl;
+        return ptr;
+    }
+    while (getline(file, line)) {
+        if (line.find("Train_Name: ") != string::npos) {
+            train_name01 = line.substr(12); //To extract the train name
+        } else if (line.find("Number_of_tickets: ") != string::npos) {
+            num_tickets = stoi(line.substr(19)); //To extract the number of tickets
+        } else if (line.find("Ticket_Number: ") != string::npos) {
+           ticket_num = stoi(line.substr(15)); //To extract the ticket number
+        } else if (line.find("Train_Number: ") != string::npos) {
+            train_num = stoi(line.substr(14)); //To extract the train number
+        } else if (line.find("Type_of_tickets: ") != string::npos) {
+            type_of_ticket01 = line.substr(17); //To extract the type of seat reserved
+        } else if(line.find("Date: ") != string::npos){
+            date = line.substr(6); //To extract the date 
+        } else if(line.find("Gender: ") != string::npos){
+            gen3 = line.substr(8); //To extract the gender
+        } else if(line.find("Category: ") != string::npos){
+            categ3 = line.substr(10); //To extract the category
+        } else if(line.find("Aadhar No: ") != string::npos){
+            aadhar3 = line.substr(11); //To extract the category
+        } else if (line.find("Cost: ") != string::npos) {
+            cost = stoi(line.substr(6)); //To extract the cost
+            
+            totalcost += cost; 
+            for(i = 0; i < 36; i++)
+            {
+                if(train_num == number[i])
+                {
+                    count = i;
+                }         
+            }
+            if(count == -1)
+            {
+                return ptr;
+            }
+            //For adding a node to the linked list using the data extracted from the files.
+            head[count] = book_ticket(head[count],train_num,num_tickets,cost,train_name01,type_of_ticket01,ticket_num,date,gen3,categ3,aadhar3);
+            ticket[count] += num_tickets; 
+        }
+    }
+
+    file.close();
+
+    return ticket;
+}
+
+//function to store the values into the file
+void StoringDataIntoFiles(NODE head[])
+{
+    int i;
+    ofstream outFile(file_name);
+
+    if (outFile.is_open())
+    {
+        for(i = 0;i < 36;i++)
+        {
+            while(head[i] != NULL)
+            {
+                outFile<<"Train_Name: "<<head[i]->train_name<<endl;
+                outFile<<"Number_of_tickets: "<<head[i]->numoftickets<<endl;
+                outFile<<"Ticket_Number: "<<head[i]->ticket_num<<endl;
+                outFile<<"Train_Number: "<<head[i]->train_num<<endl;
+                outFile<<"Type_of_tickets: "<<head[i]->typeoftickets<<endl;
+                outFile<<"Date: "<<head[i]->date_of_reservation<<endl;
+                outFile<<"Gender: "<<head[i]->gender<<endl;               
+                outFile<<"Category: "<<head[i]->categ<<endl;
+                outFile<<"Aadhar No: "<<head[i]->aadhar<<endl;
+                outFile<<"Cost: "<<head[i]->cost<<endl;
+                outFile<<"-----------------------------------------------------"<<endl;
+                head[i] = head[i]->next;
+            }
+        }
+        outFile.close();
+    }
+    else
+        cout<<"Unable to open the file for writing.";
+}
+
+//FUNCTION TO CANCEL TICKETS OF TRAIN
+
+NODE delete_ticket(NODE head,int value,int tick_number)
+{
+    if (head == NULL) {
+        cout << "\nThere is no train tickets reserved in the number provided! \n";
+        return head;
+    }
+
+    NODE temp = head;
+    //To check if the first node matches the criteria for deletion.
+    if (head->train_num == value && head->ticket_num == tick_number) {
+        head = head->next;
+        delete temp;
+        cout << "\nReservation cancelled successfully\n";
+        return head;
+    }
+    NODE one = NULL;
+    NODE two = head;
+    //To delete a node other than the first node. 
+    while (two != NULL) {
+        if (two->train_num == value && two->ticket_num == tick_number) {
+            if (one != NULL) {
+                one->next = two->next;
+            }
+            delete two;
+            cout << "\nReservation cancelled successfully\n";
+            return head;
+        } else {
+            one = two;
+            two = two->next;
+        }
+    }
+    cout << "\nERROR: Check the entered details\n";
+    
+    return head;
+}
+
+//FUNCTION TO DISPLAY THE TRAIN TICKETS BOOKED BY A USER
+void display(NODE head[],int count)
+{   
+    NODE temp1 = head[count]; 
+    if(temp1 != NULL)
+    {
+        cout<<"\nReservation details are : \n";
+        while(temp1 != NULL)
+        {
+            cout<<"\nTrain Number : "<<temp1->train_num;
+            cout<<"\nTicket Number : "<<temp1->ticket_num;
+            cout<<"\nTrain Name : "<<temp1->train_name;
+            cout<<"\nNumber of tickets : "<<temp1->numoftickets;
+            cout<<"\nType of tickets : "<<temp1->typeoftickets;
+            cout<<"\nDate of Reservation : "<<temp1->date_of_reservation;
+            cout<<"\nGender : "<<temp1->gender;
+            cout<<"\nCategory : "<<temp1->categ;
+            cout<<"\nAadhar Number : "<<temp1->aadhar;
+            cout<<"\nCost of ticket : "<<temp1->cost;
+            cout<<endl;
+
+            temp1 = temp1->next;
+        }
+    }
+    else
+    {
+        cout<<"\nThere is no tickets reserved to display!!\n";
+        return;
+    }
+}
+
+//FUNCTION TO READ AND DISPLAY THE TRAINS AVAILABLE IF THE USERS WISH TO BOOK TICKETS
+void details()
+{
+    int choice1;
+    string line;
+
+    do
+    {
+        cout<<"\nSelect SOURCE PLACE[Current Location] : \n";
+        cout<<"1. Bengaluru\n2. Mumbai\n3. Kolkata\n4. Delhi\n";
+        cout<<"Enter your choice : ";
+        cin>>choice1;
+    } while(choice1 < 1 || choice1 > 4);
+
+    switch(choice1)
+    {
+        case 1 :    {
+                        ifstream inputFile("bengaluru.txt");
+                        if (!inputFile.is_open()) {
+                            cerr << "Error! Cannot display the details!!!" <<endl;
+                            return; // Return an error code
+                        }
+                        // Read data from the file
+                        cout <<"\nFollowing Destination and Routes are available : \n";
+                        while (getline(inputFile, line)) {
+                            cout<<line<<endl;
+                        }
+                        // Close the file
+                        inputFile.close();
+                    }
+                    break;
+
+        case 2 :    {
+                        ifstream inputFile1("mumbai.txt");
+                        if (!inputFile1.is_open()) {
+                            cout << "Error! Cannot display the details!!!"<<endl;
+                            return; // Return an error code
+                        }
+                        // Read data from the file
+                        cout <<"\nFollowing Routes are available : \n";
+                        while (getline(inputFile1, line)) {
+                            cout<<line<<endl;
+                        }
+                        // Close the file
+                        inputFile1.close();
+                    }
+                    break;
+
+        case 3 :    {
+                        ifstream inputFile1("kolkata.txt");
+                        if (!inputFile1.is_open()) {
+                            cerr << "Error! Cannot display the details!!!"<<endl;
+                            return; // Return an error code
+                        }
+                        // Read data from the file
+                        cout <<"\nFollowing Routes are available : \n";
+                        while (getline(inputFile1, line)) {
+                            cout<<line<<endl;
+                        }
+                        // Close the file
+                        inputFile1.close();
+                    }
+                    break;
+
+        case 4 :    {
+                        ifstream inputFile1("delhi.txt");
+                        if (!inputFile1.is_open()) {
+                            cerr << "Error! Cannot display the details!!!"<<endl;
+                            return; // Return an error code
+                        }
+                        // Read data from the file
+                        cout <<"\nFollowing Routes are available : \n";
+                        while (getline(inputFile1, line)) {
+                            cout<<line<<endl;
+                        }
+                        // Close the file
+                        inputFile1.close();
+                    }
+                    break;
+
+        default :   break;
+    }
+}
+
+//FUNCTION TO CHECK IF THE ENTERED TRAIN NUMBER IS SAME AS THAT PRESENT IN THE DATABASE AT THE TIME OF BOOKING(ERROR HANDLING)
+
+int tnum()
+{
+    int b,i,num,count;
+    int number[] = {11302,16534,16210,22691,12627,12649,22888,12253,15227,12214,22692,12648,12314,12312,13008,12952,12926,19020,12863,22306,22502,12301,12329,12311,12860,12321,18030,19568,16613,16331,12925,12903,19019,12859,12809,12322};
+    bool flag = true;
+    b = 0;
+    count = 0;
+    while(flag)
+    {
+        if(b > 0)
+        {
+            cout<<"\nEntered details are wrong!\n";
+        }
+        cout<<"\nEnter the train number : \n";
+        cin>>num;
+        for(i = 0; i < 36; i++)
+        {
+            if(number[i] == num)
+            {
+                count = i;
+                flag = false;
+            }         
+        }
+        b++; 
+    }
+    return count;
+}
+
+//FUNCTION TO PURCHASE THE TICKETS
+
+NODE reserve(NODE head[],int number[],int count,int num)
+{
+    int i,m,z,a,n1,n2,n3,n4,price,len,j,t_num,date,month,cost2222,count1,val;
+    string name,fulldate,date1,month1,aad;
+    NODE current;
+    const char* tname[] = {"UDYAN EXPRESS", "JODHPUR EXPRESS","AJMER EXPRESS","RAJDHANI EXPRESS","KARNATAKA EXPRESS","KONGU EXPRESS","HWH HUMSAFAR","ANGA EXPRESS","MUZAFFARPUR EXPRESS","DEE YPR DURONTO","SBC RAJDHANI","KONGU EXP","SEALDAH RAJDHANI","KALKA MAIL","U A TOOFAN EXP","MUMBAI RAJDHANI","PASCHIM EXPRESS","DEHRADUN EXPRESS","HWH SMVB EXP","JSME SMVT EXP","NTSK SMVB EXP","RAJDHANI EXP","SAMPARK K EXP","NETAJI EXPRESS","GITANJALI EXP","MUMBAI MAIL","SHM LTT EXPRESS","VIVEK EXPRESS","RJT CBE EXP","TRIVANDRAM EXP","PASCHIM EXPRESS","GOLDEN TEMPLE","BDTS HW EXP","GITANJALI EXPRESS","HOWRAH MAIL","KOLKATA MAIL"};
+    const char* type[] = {"Sleeper","AC","Non-AC"};
+    const char* gen1[] = {"Male","Female","Others"};
+    const char* cat[] = {"Children","Adult","Senior Citizen"};
+    bool flag = true;
+    a = 0;
+    len = 36;
+    cost2222 = 0;
+    do
+    {
+        cout<<"\nEnter the number of tickets you want to reserve [<50]: \n";
+        cin>>n1;
+    } while(n1 < 1 || n1 > 50);
+
+    for(z = 0; z < n1;z++)
+    {
+        do
+        {
+            cout<<"\nFor Ticket "<<(z + 1)<<endl;
+            cout<<"\nGender : 1. MALE 2. FEMALE 3. Others -----> ";
+            cin>>n3;
+        } while (n3 < 1 || n3 > 3);
+        
+        do
+        {
+            cout<<"\nCategory : 1. Children 2. Adult 3. Senior Citizen -----> ";
+            cin>> n4;
+        } while (n4 < 1 || n4 > 3);
+
+        do
+        {
+            cout<<"\nEnter what type of seat you want to reserve : 1. Sleeper 2. AC 3. Non-AC ----> ";
+            cin>>n2;
+        } while(n2 != 1 && n2 != 2 && n2 != 3);        
+
+        do
+        {
+            cout<<"\nNOTE : \n1. Do not leave spaces after four digits.\n2. Enter in the following format : \n\t'123456789012'\n";
+            cout<<"\nEnter Aadhar Number : ";
+            cin>>aad;
+            val = aad.length();
+        } while (val != 12);
+        
+        for(i = 0; i < len; i++)
+        {
+            if(number[i] == num)
+            {
+                count = i;
+            }        
+        }
+        {
+            if(type[n2 - 1] == "Sleeper")
+            {
+                price = 800;
+            }
+            else if(type[n2 - 1] == "AC")
+            {
+                price = 2300;
+            }
+            else if(type[n2 - 1] == "Non-AC")
+            {
+                price = 1500;
+            }
+        }
+        {
+            cout<<"\nReservation for the following dates are available : ";//change the dates accordingly!
+            cout<<"\nFrom 12/05/2024 till 30/07/2024\n";
+            do
+            {
+                cout<<"\nEnter the date for which the Reservation must be done : ";
+                cin>>date;
+                cout<<"\nEnter the month for which the Reservation must be done : ";
+                cin>>month;
+            }while(!((date >= 12 && date <=31 && month == 5) || (date>= 1 && date<= 30 && month == 6) || (date>= 1 && date<= 30 && month == 7)));
+
+            date1 = to_string(date);
+            month1 = to_string(month);
+            fulldate = date1 +"/"+ month1 + "/2024";
+        }
+        srand(time(NULL));
+        
+        t_num = (rand() % 600000) + 100000; 
+
+        totalcost = totalcost + price;
+
+        head[count] = book_ticket(head[count],num,(n1/n1),price,tname[count],type[n2 - 1],t_num,fulldate,gen1[n3 - 1],cat[n4 - 1],aad);
+
+        cout<<"\nTicket Booked Successfully!\n";
+    }
+
+    return head[count];
+}
+
+int payment() 
+{
+    int n;
+    string id;    
+    const char* qrImagePath = "C:/Users/Connect/Desktop/aa.png";//change the path accordingly!
+    cout<<"\nTo continue the payment process, enter 1\nTo go back enter any number other than 1 ----> ";
+    cin>>n;
+
+    if(n == 1)
+    {
+        // Open the QR code image using the default viewer
+        HINSTANCE result = ShellExecuteA(NULL, "open", qrImagePath, NULL, NULL, SW_SHOWNORMAL);
+        if ((int)result <= 32) {
+        // An error occurred
+        cerr << "Error opening the QR code" <<endl;
+        return 1;  
+        }      
+        {
+            cout<<"Instructions : \n";
+            cout<<"Click on the new window which is opened\nAfter paying the money please enter the the transaction id or UTR number\nNOTE : Do not close the application till you enter the id or number!\n";
+
+            cout<<"\nEnter the id : ";
+            cin>>id;
+
+            ofstream outFILE("paymentDetails.txt",ios::app);
+            if(!outFILE)
+            {
+                cout<<"Please try again later!\n";
+                return 1;
+            }
+            outFILE<<"ID: "<<id<<endl;
+            outFILE<<"--------------------------------------------------------------------------"<<endl;
+
+            outFILE.close();
+        }
+    }
+    
+    else
+    {
+        printf("Continue!\n");
+    }
+    return 0;
+}
+
+void feedback()
+{
+    int choice;
+    char feedback[2500];
+    char complaint[2500];
+    cout<<"\nTo provide feedback please Enter 1! \n";
+    cout<<"To raise a complaint please Enter 2! \n";
+    cout<<"To return to main menu Enter 3! \n";
+    cout<<"\n\nContact Information : \nE-mail : tripmate@gmail.com\nTelephone : 080-8796-2324\n";
+    cout<<"\nEnter your choice : \n";
+    cin>>choice;
+    switch(choice)
+    {
+        case 1 :    {
+                        cout<<"\nProvide the feedback in less than 250 words (To return to main menu click \"Enter\") : ";
+                        cin.ignore();
+                        cin.getline(feedback, 2500);
+                        ofstream outFile("feedback.txt",ios::app);
+                        if(!outFile)
+                        {
+                            cout<<"Please try again later!\n";
+                            return;
+                        }
+                        else
+                        {
+                            outFile<<"Feedback: "<<feedback<<endl;
+                            outFile<<"-------------------------------------------------------------"<<endl;
+                        }
+                        outFile.close();
+                    }
+                    break;
+        case 2 :    {
+                        cout<<"\nProvide the complaint in less than 250 words (To return to main menu click \"Enter\") : ";
+                        cin.ignore(); // to clear the buffer
+                        cin.getline(complaint, 2500);
+                        ofstream outFile1("complaint.txt",ios::app);
+                        if(!outFile1)
+                        {
+                            cout<<"Please try again later!\n";
+                            return;
+                        }
+                        else
+                        {
+                            outFile1<<"Complaint: "<<complaint<<endl;
+                            outFile1<<"--------------------------------------------------------------"<<endl;
+                        }
+                        outFile1.close();
+                    }
+                    break;
+        
+        case 3 :    break;
+
+        default :   break;
+    }               
+}
+
+void tcost()
+{
+    cout<<"\nTotal Cost : "<<totalcost;
+    payment();
+}
+
+//FUNCTION TO DEALLOCATE MEMORY
+void deallocateMemory2(NODE head) {
+    NODE current = head;
+    while (current != NULL) {
+        NODE temp = current;
+        current = current->next;
+        delete temp;
+    }
+}
+
+//FUNCTION FOR CARRYING OUT TRAIN RELATED OPERATIONS
+int main()
+{  
+    int choice1,choice2,m,i,num,b,count,ttnum,j,x,count1,tickets,tick_num,a,tt,z,k,y;
+    string name;
+    bool flag = true;
+    int number[] = {11302,16534,16210,22691,12627,12649,22888,12253,15227,12214,22692,12648,12314,12312,13008,12952,12926,19020,12863,22306,22502,12301,12329,12311,12860,12321,18030,19568,16613,16331,12925,12903,19019,12859,12809,12322};
+    b = 0;
+    x = 0;
+       
+    NODE head[36];
+    for(m = 0; m < 36; m++)
+    {
+        head[m] = NULL;
+    }
+
+    authorization();
+
+
+    while(true)
+    {
+        cout<<"\nPress 1 for Train related information and to manage yor tickets!\n";
+        cout<<"Press 2 for Train reservation\n";
+        cout<<"NOTE : The option option is for regular travelers who are familiar with the routes to speed up their process!\n";
+        cout<<"Press 3 for Other Operations!\n";
+        cout<<"Press 4 to close the application!\n";
+        cout<<"Enter your choice ----> ";
+        cin>>choice1;
+        if(choice1 == 4)
+        {
+            exit(0);
+        }
+        if(choice1 == 1 || choice1 == 2 || choice1 == 3)
+        {
+            break;
+        }
+    }
+    
+    switch(choice1)
+    {
+        case 1 :    details();
+                    break;
+        
+        case 2 :    {
+                        int* totalTickets = readingDataFromFile(head);
+                        count = tnum();
+                        z = 230 - totalTickets[count];
+                        if(z>0)
+                        {
+                            cout<<"\n"<<z<<" Ticket(s) are available!BOOK FAST!!!";
+                        }
+                        if(totalTickets[count] >= 230)
+                        {
+                            cout<<"\nCannot Book tickets for this train as all the seats are filled!!!\n";
+                        }
+                        else
+                        {
+                            head[count] = reserve(head,number,count,number[count]);
+                        }
+                        StoringDataIntoFiles(head);
+                    }
+                    break;
+
+        case 3 :    {
+                        cout<<"\nPress 1 To display Total cost and continue with the Payment procedure!";
+                        cout<<"\nPress 2 To provide Feedback or to file a Complaint!";
+                        cout<<"\nEnter any other number to go back!";
+                        cout<<"\nEnter your choice : ";
+                        cin>>y;
+
+                        if(y == 1)
+                        {
+                            {
+                                totalcost = 0;
+                                int* totalTickets = readingDataFromFile(head);
+                                {
+                                    count = tnum();
+                                    display(head,count);
+                                }
+                                StoringDataIntoFiles(head);
+                            }                           
+                            tcost();
+                        }
+                        else if(y == 2)
+                        {
+                            feedback();
+                        }
+                        else
+                        {
+                            cout<<"\nContinue!\n";
+                        }
+                    }
+                    break;
+
+        default :   break;
+    } 
+
+    do{
+        while(true)
+        {
+            cout<<"\nPress 0 if you want to see the train details\nPress 1 if you want to continue booking tickets\nPress 2 if you want to cancel the reservation\nPress 3 if you want to display the booked tickets\nPress 4 to display Total Cost\nPress 5 to provide feedback or file a complaint\nPress 6 to Exit\n";
+            cin>>choice2;
+            if(choice2 >= 0 && choice2 <= 6)
+            {
+                break;
+            }
+        }
+
+        switch (choice2)
+        {
+            case 0 :    details();
+                        break;
+
+            case 1 :    {
+                            int* totalTickets = readingDataFromFile(head);
+                            count = tnum();
+                            z = 230 - totalTickets[count];
+                            if(z>0)
+                            {
+                                cout<<"\n"<<z<<" Ticket(s) are available! BOOK FAST!!!\n";
+                            }
+                            if(totalTickets[count] >= 230)
+                            {
+                                cout<<"\nCannot Book tickets for this train as all the seats are filled\n";
+                            }
+                            else
+                            {
+                                head[count] = reserve(head,number,count,number[count]);
+                            }
+                            StoringDataIntoFiles(head);
+                            break;
+                        }
+
+            case 2 :    {
+                            int* totalTickets = readingDataFromFile(head);
+                            count1 = tnum();    
+                            cout<<"\nEnter your ticket number : \n";
+                            cin>>tick_num;
+                            head[count1] = delete_ticket(head[count1],number[count1],tick_num);
+                            StoringDataIntoFiles(head);
+                            break;
+                        }
+
+            case 3 :    {
+                            int* totalTickets = readingDataFromFile(head);
+                            {
+                                count = tnum();
+                                display(head,count);
+                            }
+                            StoringDataIntoFiles(head);
+                            break;
+                        }
+
+            case 4 :    {
+                            totalcost = 0;
+                            int* totalTickets = readingDataFromFile(head);
+                            {
+                                count = tnum();
+                                display(head,count);
+                            }
+                            StoringDataIntoFiles(head);
+                            tcost();
+                            break;
+                        }
+
+            case 5 :    {
+                            feedback();
+                            break;
+                        }
+
+            case 6 :    {
+                            int* totalTickets = readingDataFromFile(head);
+                            StoringDataIntoFiles(head);
+                            for (k = 0; k < 36; k++) {
+                                deallocateMemory2(head[k]);
+                            }
+                            break;
+                        }
+
+            default :   break;
+
+        }    
+    }while(choice2 != 6);
+}

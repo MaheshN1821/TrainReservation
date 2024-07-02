@@ -1,0 +1,22 @@
+Source : Bengaluru 
+
+Destination : Mumbai
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station       Destination Station    Price(Sleeper/Non-AC/AC)
+11302     UDYAN EXPRESS     06 : 30         05 : 35         23 hrs 05 mins  KSR(Bangalore City)  BSR(Vasai Road)        800/1500/2300
+16534     JODHPUR EXPRESS   07 : 30         07 : 15         23 hrs 45 mins  YPR(Bangalore City)  BSR(Vasai Road)        800/1500/2300
+16210     AJMER EXPRESS     22 : 20         22 : 40         24 hrs 20 mins  KSR(Bangalore City)  BSR(Vasai Road)        800/1500/2300
+
+Destination : Delhi 
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station       Destination Station    Price(Sleeper/Non-AC/AC)
+22691     RAJDHANI EXPRESS  23 : 40         07 : 35         31 hrs 55 mins  KSR(Bangalore City)  Delhi Sarai Rohilla    800/1500/2300
+12627     KARNATAKA EXPRESS 22 : 43         14 : 25         39 hrs 32 mins  YPR(Bangalore City)  New Delhi(NDLS)        800/1500/2300
+12649     KONGU EXPRESS     19 : 20         09 : 00         37 hrs 40 mins  KSR(Bangalore City)  Delhi Sarai Rohilla    800/1500/2300
+
+Destination : Kolakta
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station       Destination Station    Price(Sleeper/Non-AC/AC)
+22888     HWH HUMSAFAR      10 : 15         18 : 30         32 hrs 15 mins  KSR(Bangalore City)  Howrah Junction(HWH)   800/1500/2300
+12253     ANGA EXPRESS      13 : 50         00 : 10         34 hrs 20 mins  YPR(Bangalore City)  Dankuni Junction(DKAE) 800/1500/2300
+15227     MUZAFFARPUR EXP   00 : 30         11 : 36         35 hrs 06 mins  KSR(Bangalore City)  Howrah Junction(HWH)   800/1500/2300

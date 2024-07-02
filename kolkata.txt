@@ -1,0 +1,22 @@
+Source : Kolkata
+
+Destination : Bengaluru
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station          Destination Station    Price(Sleeper/Non-AC/AC)
+12863     HWH SMVB EXP      22 : 55         05 : 53         30 hrs 58 mins  Howrah Junction (HWH)   KSR(Bangalore City)    800/1500/2300
+22306     JSME SMVT EXP     11 : 53         20 : 15         32 hrs 22 mins  Dankuni Junction (DKAE) YPR(Bangalore City)    800/1500/2300
+22502     NTSK SMVB EXP     00 : 15         10 : 16         34 hrs 06 mins  Howrah Junction (HWH)   KSR(Bangalore City)    800/1500/2300
+
+Destination : Delhi    
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station          Destination Station    Price(Sleeper/Non-AC/AC)
+12301     RAJDHANI EXP      16 : 50         10 : 05         17 hrs 15 mins  Howrah Junction (HWH)   New Delhi(NDLS)        800/1500/2300
+12329     SAMPARK K EXP     13 : 10         08 : 50         19 hrs 40 mins  Dankuni Junction (DKAE) Delhi Sarai Rohilla    800/1500/2300
+12311     NETAJI EXPRESS    21 : 55         21 : 21         23 hrs 26 mins  Howrah Junction (HWH)   New Delhi (NDLS)       800/1500/2300
+
+Destination : Mumbai    
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station          Destination Station    Price(Sleeper/Non-AC/AC)
+12860     GITANJALI EXP     14 : 05         21 : 20         31 hrs 15 mins  Howrah Junction (HWH)   Lokmanya Tilak(LTT)    800/1500/2300
+12321     MUMBAI MAIL       23 : 35         13 : 15         37 hrs 40 mins  Dankuni Junction (DKAE) Panvel Junction(PNVL)  800/1500/2300
+18030     SHM LTT EXPRESS   15 : 35         04 : 05         36 hrs 30 mins  Howrah Junction (HWH)   Panvel Junction(PNVL)  800/1500/2300

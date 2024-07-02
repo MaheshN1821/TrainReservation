@@ -1,0 +1,22 @@
+Source : Mumbai 
+
+Destination : Bengaluru
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station      Destination Station     Price(Sleeper/Non-AC/AC)
+19568     VIVEK EXPRESS     16 : 45         12 : 50         20 hrs 03 mins  BSR(Vasai Road)     KSR(Bangalore City)     800/1500/2300
+16613     RJT CBE EXP       13 : 55         15 : 45         25 hrs 50 mins  BSR(Vasai Road)     YPR(Bangalore City)     800/1500/2300
+16331     TRIVANDRAM EXP    21 : 15         15 : 55         18 hrs 39 mins  BSR(Vasai Road)     KSR(Bangalore City)     800/1500/2300
+
+Destination : Delhi
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station      Destination Station     Price(Sleeper/Non-AC/AC)
+12925     PASCHIM EXPRESS   11 : 25         11 : 05         23 hrs 15 mins  BSR(Vasai Road)     New Delhi(NDLS)         800/1500/2300
+12903     GOLDEN TEMPLE     18 : 45         13 : 50         19 hrs 05 mins  BSR(Vasai Road)     New Delhi(NDLS)         800/1500/2300
+19019     BDTS HW EXP       00 : 05         02 : 30         26 hrs 25 mins  BSR(Vasai Road)     Hazrat Nizamuddin(NZM)  800/1500/2300
+
+Destination : Kolkata
+
+T Number  Train Name        Boarding Time   Reaching Time   Duration        Source Station      Destination Station     Price(Sleeper/Non-AC/AC)
+12859     GITANJALI EXPRESS 06 : 00         12 : 30         30 hrs 30 mins  BSR(Vasai Road)     Shalimar Kolkata(SHM)   800/1500/2300
+12809     HOWRAH MAIL       21 : 10         06 : 00         32 hrs 05 mins  BSR(Vasai Road)     Shalimar Kolkata(SHM)   800/1500/2300
+12322     KOLKATA MAIL      22 : 15         11 : 40         37 hrs 25 mins  BSR(Vasai Road)     Dankuni Junction(DKAE)  800/1500/2300
